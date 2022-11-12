@@ -1,0 +1,33 @@
+﻿@page "/login"
+
+<EditForm Model="SignInRequest" OnValidSubmit="LoginUser">
+    <DataAnnotationsValidator />
+    <MudItem xs="12" sm="7">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h2">Sign In</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                @if (ShowSignInErrors)
+                {
+                    <MudText Style="color:red;font-weight:bold;">@Errors</MudText>
+                }
+                <MudTextField Label="User Name" @bind-Value="SignInRequest.UserName" For="@(() => SignInRequest.UserName)" />
+                <MudTextField Label="Password" HelperText="Enter your password" Class="mt-3"
+                              @bind-Value="SignInRequest.Password" For="@(() => SignInRequest.Password)" InputType="InputType.Password" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Sign in</MudButton>
+                <MudLink Href="/register" Class="ml-auto">Register as a new user</MudLink>
+            </MudCardActions>
+
+        </MudCard>
+    </MudItem>
+</EditForm>
+
+
+@code {
+
+}

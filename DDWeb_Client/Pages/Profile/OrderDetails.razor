@@ -1,0 +1,93 @@
+﻿@page "/orderDetails/{OrderId:int}"
+@inject IOrderService _orderService
+@inject NavigationManager _navigationManager
+
+@if (IsProcessing)
+{
+    <div style="position:fixed;top:50%;left:50%;margin-top:-50px;margin-left:-100px;">
+        <img src="images/ajax-loader.gif" />
+    </div>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="12" sm="12" md="5" lg="5" xxl="5" xl="5">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h4">Customer Details :  #@(CustomerOrder.OrderHeader.Id+1000)</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">
+                        Customer Name : <code style=""> @CustomerOrder.OrderHeader.Name</code>
+                    </MudText>
+                     <MudDivider />
+                    <MudText Typo="Typo.h6">
+                        Mobile Number : <code style=""> @CustomerOrder.OrderHeader.PhoneNumber</code>
+                    </MudText>
+                     <MudDivider />
+                    <MudText Typo="Typo.h6">
+                        Order Date : <code style=""> @CustomerOrder.OrderHeader.OrderDate.ToString("dd/MMM/yyyy hh:mm tt")</code>
+                    </MudText>
+                     <MudDivider />
+                    <MudText Typo="Typo.h6">
+                        Address : <code style="">
+                            @CustomerOrder.OrderHeader.StreetAddress ,
+                            @CustomerOrder.OrderHeader.City
+                        </code>
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="7" lg="7" xxl="7" xl="7">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h4">Order Detail</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                @foreach (var customerOrderDetail in @CustomerOrder.OrderDetails)
+                {
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="8" sm="8" md="6" lg="6" xxl="6" xl="6">
+                                <MudText Typo="Typo.h5"><b>@customerOrderDetail.ProductName</b></MudText>
+                                <MudText Typo="Typo.h6">Size : @customerOrderDetail.Size</MudText>
+                                <MudText Typo="Typo.h6">Count : @customerOrderDetail.Count</MudText>
+                                <MudElement HtmlTag="h2">
+                                    ₹ <code style="color:black;"> @((customerOrderDetail.Count * customerOrderDetail.Price))</code>
+                                </MudElement>
+                            </MudItem>
+                        </MudGrid>
+                        <MudDivider />
+                    </MudCardContent>
+                }
+                <MudCardActions>
+                    <MudAlert>
+                        <MudText Typo="Typo.h5" Class="ml-auto">
+                            Total (₹) ₹ @CustomerOrder.OrderHeader.OrderTotal
+                        </MudText>
+                    </MudAlert>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+}
+@code {
+    [Parameter]
+    public int OrderId { get; set; }
+    public bool IsProcessing { get; set; } = false;
+    public OrderDTO CustomerOrder { get; set; } = new();
+    protected override async Task OnInitializedAsync()
+    {
+        IsProcessing = true;
+        CustomerOrder = await _orderService.Get(OrderId);
+        IsProcessing = false;
+    }
+    private void GoBack()
+    {
+        _navigationManager.NavigateTo("/orders");
+    }
+
+}

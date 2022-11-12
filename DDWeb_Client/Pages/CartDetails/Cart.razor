@@ -1,0 +1,173 @@
+﻿@page "/cart"
+@inject ILocalStorageService _localStorage
+@inject IProductService _productService
+@inject ICartService _cartService
+@inject NavigationManager _navigationManager
+
+@if (IsProcessing)
+{
+    <div style="position:fixed;top:50%;left:50%;margin-top:-50px;margin-left:-100px;">
+        <img src="images/ajax-loader.gif" />
+    </div>
+}
+else
+{
+    @if (!ShoppingCart.Any())
+    {
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="10" lg="10" xxl="10" xl="10">
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h4">Your Card is empty</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudImage Src="images/emptycart.png" Height="250" Alt=" Empty cart  " Elevation="25" Class="rounded-lg emptyCardImage" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton @onclick="(args)=>GoToHome()" Variant="Variant.Filled" Color="Color.Primary">Continue Shopping</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+
+    }
+    else
+    {
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="10" lg="10" xxl="10" xl="10">
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h4">Food Cart</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton @onclick="(args)=>GoToHome()" Icon="@Icons.Material.Filled.Home" Color="Color.Default" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+
+                    @foreach (var item in ShoppingCart)
+                    {
+                        <MudCardContent>
+                            <MudGrid>
+                                <MudItem xs="4" sm="4" md="3" lg="3" xxl="2" xl="2">
+                                    <MudImage Src="@item.Product.ImageUrl" Alt="@item.Product.Name" Elevation="25" Class="cartImageHeight rounded-lg" />
+                                </MudItem>
+                                <MudItem xs="8" sm="8" md="4" lg="4" xxl="3" xl="3">
+                                    <MudText Typo="Typo.h5"><b>@item.Product.Name</b></MudText>
+                                    <MudText Typo="Typo.h6">Size : @item.ProductPrice.Size</MudText>
+                                </MudItem>
+                                <MudItem xs="5" sm="5" md="3" lg="3" xxl="2" xl="2">
+                                    <MudText Typo="Typo.h5">
+                                        ₹ @item.ProductPrice.Price.ToString()
+                                        <span class="text-muted">x</span>
+                                        @item.Count
+                                    </MudText>
+                                </MudItem>
+                                <MudItem xs="5" sm="5" md="3" lg="3" xxl="2" xl="2">
+                                    <MudFab Color="Color.Primary"
+                                @onclick="()=>Increment(item.ProductId,item.ProductPriceId,1)"
+                                StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" />
+
+                                    <MudFab Color="Color.Secondary"
+                                @onclick="()=>Decrement(item.ProductId,item.ProductPriceId,1)"
+                                StartIcon="@Icons.Material.Filled.Remove" Size="Size.Small" />
+                                </MudItem>
+                                <MudItem xs="2" sm="2" md="1" lg="1" xxl="1" xl="1">
+                                    <MudFab Color="Color.Error"
+                                @onclick="()=>Decrement(item.ProductId,item.ProductPriceId,0)"
+                                StartIcon="@Icons.Material.Filled.RemoveShoppingCart" Size="Size.Small" />
+                                </MudItem>
+                            </MudGrid>
+                            <MudDivider />
+                        </MudCardContent>
+                    }
+
+                    <MudAlert>
+                        <MudText Typo="Typo.h5" Class="ml-auto">
+                            Total (₹) @OrderTotal.ToString()
+                        </MudText>
+                    </MudAlert>
+                    <MudCardActions>
+                        <MudButton @onclick="(args)=>GoToSummary()" Variant="Variant.Filled" Color="Color.Primary">Summary</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    }
+
+}
+
+@code {
+    public bool IsProcessing { get; set; } = false;
+    private List<ShoppingCart> ShoppingCart = new List<ShoppingCart>();
+    private IEnumerable<ProductDTO> Products { get; set; }
+    private double OrderTotal { get; set; } = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsProcessing = true;
+
+        Products = await _productService.GetAll();
+        await LoadCart();
+        IsProcessing = false;
+    }
+
+    private async Task LoadCart()
+    {
+        OrderTotal = 0;
+        ShoppingCart = await _localStorage.GetItemAsync<List<ShoppingCart>>(SD.ShoppingCart);
+        if (ShoppingCart == null)
+        {
+            ShoppingCart = new List<ShoppingCart>();
+            return;
+        }
+
+        foreach (var cart in ShoppingCart)
+        {
+            cart.Product = Products.FirstOrDefault(u => u.Id == cart.ProductId);
+            cart.ProductPrice = cart.Product.ProductPrices.FirstOrDefault(u => u.Id == cart.ProductPriceId);
+            OrderTotal += (cart.ProductPrice.Price * cart.Count);
+        }
+    }
+
+    private async Task Increment(int ProductId, int ProductPriceId, int Count)
+    {
+        IsProcessing = true;
+        await _cartService.IncrementCart(new()
+            {
+                Count = Count,
+                ProductId = ProductId,
+                ProductPriceId = ProductPriceId
+            });
+
+        await LoadCart();
+        IsProcessing = false;
+    }
+
+    private async Task Decrement(int ProductId, int ProductPriceId, int Count)
+    {
+        IsProcessing = true;
+        await _cartService.DecrementCart(new()
+            {
+                Count = Count,
+                ProductId = ProductId,
+                ProductPriceId = ProductPriceId
+            });
+
+        await LoadCart();
+        IsProcessing = false;
+    }
+
+    private void GoToHome()
+    {
+        _navigationManager.NavigateTo("/");
+    }
+
+    private void GoToSummary()
+    {
+        _navigationManager.NavigateTo("/summary");
+    }
+
+}

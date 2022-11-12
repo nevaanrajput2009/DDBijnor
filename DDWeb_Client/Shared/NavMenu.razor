@@ -1,0 +1,132 @@
+﻿@inject ISyncLocalStorageService _localStorage
+@inject ICartService _cartService
+@implements IDisposable
+
+<MudAppBar Elevation="1">
+    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+    <MudSpacer />
+    <div>
+    <MudNavLink Href="/cart" Style="height: 61px;margin-top: -12%;">
+    <MudBadge Content="@GetCartCount()" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
+        <MudIcon Icon="@Icons.Material.Filled.ShoppingBasket" Color="Color.Default" />
+    </MudBadge>
+    </MudNavLink>
+     </div>
+    <AuthorizeView>
+        <Authorized>
+            <MudText Typo="Typo.h6"> @context.User.Identity.Name</MudText>
+        </Authorized>
+    </AuthorizeView>
+   
+</MudAppBar>
+<MudDrawer @bind-Open="@open" Elevation="1">
+    <MudDrawerHeader>
+         <MudText Typo="Typo.h6">Daily Delight</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu>
+        <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Filled.Home">Home</MudNavLink>
+        <MudNavLink Href="/orders" Match="NavLinkMatch.All" Icon="@Icons.Filled.ShoppingCart">Orders</MudNavLink>
+        <br />
+        <AuthorizeView>
+            <Authorized>
+                <MudNavLink Href="logout" Icon="@Icons.Filled.Logout">Logout</MudNavLink>
+            </Authorized>
+            <NotAuthorized>
+                <MudNavLink Href="register" Icon="@Icons.Filled.AppRegistration">Register</MudNavLink>
+                <MudNavLink Href="login" Icon="@Icons.Filled.Login">Login</MudNavLink>
+            </NotAuthorized>
+        </AuthorizeView>
+    </MudNavMenu>
+</MudDrawer>
+
+
+@*<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+    <a class="navbar-brand" href="/">Daily Delight</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+    <li class="nav-item p-0">
+    <NavLink class="nav-link" href="/cart">
+    <span class="p-2">
+    <i class="bi bi-cart"></i> (@GetCartCount())
+    </span>
+    </NavLink>
+    </li>
+    <li class="nav-item p-0">
+    <NavLink class="nav-link" href="/orders">
+    <span class="p-2">
+    Orders
+    </span>
+    </NavLink>
+    </li>
+    </ul>
+    <form class="d-flex">
+    <ul class="navbar-nav">
+
+    <AuthorizeView>
+    <Authorized>
+    <li class="nav-item p-0">
+    <NavLink class="nav-link" href="#">
+    <span class="p-2">
+    Hello, @context.User.Identity.Name
+    </span>
+    </NavLink>
+    </li>
+    <li class="nav-item p-0">
+    <NavLink class="nav-link" href="logout">
+    <span class="p-2">
+    Logout
+    </span>
+    </NavLink>
+    </li>
+    </Authorized>
+    <NotAuthorized>
+    <li class="nav-item p-0">
+    <NavLink class="nav-link" href="register">
+    <span class="p-2">
+    Register
+    </span>
+    </NavLink>
+    </li>
+    <li class="nav-item p-0">
+    <NavLink class="nav-link" href="login">
+    <span class="p-2">
+    Login
+    </span>
+    </NavLink>
+    </li>
+    </NotAuthorized>
+    </AuthorizeView>
+
+    </ul>
+    </form>
+    </div>
+    </div>
+    </nav>*@
+
+@code {
+    bool open = false;
+    void ToggleDrawer()
+    {
+        open = !open;
+    }
+    protected override void OnInitialized()
+    {
+        _cartService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        _cartService.OnChange -= StateHasChanged;
+    }
+
+    private int GetCartCount()
+    {
+        var cart = _localStorage.GetItem<List<ShoppingCart>>(SD.ShoppingCart);
+        return cart == null ? 0 : cart.Count;
+    }
+}
