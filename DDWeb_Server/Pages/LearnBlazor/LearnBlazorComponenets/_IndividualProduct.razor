@@ -1,0 +1,44 @@
+﻿ <div class="bg-light border m-1 col-5" @onclick="(args)=>LastSelectedProduct(args,Product.Name)">
+                <h4 class="text-secondary">Product - @Product.Id</h4>
+                <input type="checkbox" @onchange="FavoriteUpdated" /> Add to Favorite <br /><br />
+                Name - @Product.Name<br/>
+                <p>RF from Parent - @FirstFragment @SecondFragment</p>
+                Show Properties : 
+                <input type="checkbox" @bind-value="Product.IsActive" checked="@(Product.IsActive?"checked":null)"/>
+
+                @if (Product.IsActive)
+                {
+                    @foreach(var prodProp in Product.ProductProperties)
+                    {
+                        <p>@prodProp.Key - @prodProp.Value</p>
+                    }
+                }
+                <br/>
+                <_EditDeleteButton IsActive="@Product.IsActive">
+                </_EditDeleteButton>
+            </div>
+@code {
+    [Parameter]
+    public Demo_Product Product { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnFavoriteUpdated { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnLastSelectedProductChange{ get; set; }
+
+    [Parameter]
+    public RenderFragment FirstFragment { get; set; }
+    [Parameter]
+    public RenderFragment SecondFragment { get; set; }
+
+    private async Task FavoriteUpdated(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        await OnFavoriteUpdated.InvokeAsync((bool)e.Value);
+    }
+
+     private async Task LastSelectedProduct(MouseEventArgs e, string name)
+    {
+        await OnLastSelectedProductChange.InvokeAsync(name);
+    }
+}

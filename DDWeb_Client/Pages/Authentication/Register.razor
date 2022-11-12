@@ -1,0 +1,37 @@
+﻿@page "/register"
+
+
+<EditForm Model="SignUpRequest" OnValidSubmit="RegisterUser">
+    <DataAnnotationsValidator />
+    <MudItem xs="12" sm="7">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h2">Sign Up</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                @if (ShowRegistrationErrors)
+                {
+                    @foreach (var error in Errors)
+                    {
+                        <MudText Style="color:red;font-weight:bold;">@error</MudText>
+                    }
+
+                }
+                <MudTextField Label="User Name" @bind-Value="SignUpRequest.Name" For="@(() => SignUpRequest.Name)" />
+                <MudTextField Label="Phone Number" HelperText="Do not need 0 or +91" @bind-Value="SignUpRequest.PhoneNumber" For="@(() => SignUpRequest.PhoneNumber)" />
+                <MudTextField Label="Password" Class="mt-3" @bind-Value="SignUpRequest.Password" For="@(() => SignUpRequest.Password)" InputType="InputType.Password" />
+                <MudTextField Label="Confirm Password" Class="mt-3" @bind-Value="SignUpRequest.ConfirmPassword" For="@(() => SignUpRequest.ConfirmPassword)" InputType="InputType.Password" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Register</MudButton>
+                <MudLink Href="/login" Class="ml-auto">Already register please login</MudLink>
+            </MudCardActions>
+
+        </MudCard>
+    </MudItem>
+</EditForm>
+
+
+
