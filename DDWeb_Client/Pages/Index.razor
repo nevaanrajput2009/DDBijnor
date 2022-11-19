@@ -44,42 +44,7 @@ else
             
         }
     </MudTabs>
-    @*
-
-        <div class="container">
-        <div class="row  pb-3 pt-3 backgroundWhite">
-        @foreach (var category in Products.Select(u => u.Category.Name).Distinct())
-        {
-        <h2 class="text-success pl-1"><b>@category</b></h2>
-
-        @foreach (var product in Products.Where(u => u.Category.Name == category))
-        {
-        <div class="col-lg-4 col-md-6 pb-4 filter">
-
-        <MudCard>
-        <MudCardHeader>
-        <CardHeaderContent>
-        <MudText Typo="Typo.body1">@product.Name</MudText>
-        <MudText Typo="Typo.body2">
-        ₹
-        @product.ProductPrices.OrderBy(u=>u.Price).FirstOrDefault()?.Price.ToString()
-        </MudText>
-        </CardHeaderContent>
-        </MudCardHeader>
-        <MudCardMedia Image="@product.ImageUrl" Height="250" />
-        <MudCardContent>
-        <MudText Typo="Typo.body2">@((MarkupString)product.Description)</MudText>
-        </MudCardContent>
-        <MudCardActions>
-        <MudButton @onclick="()=> ProductDetailClick(product.Id)" Variant="Variant.Filled" Color="Color.Success">View Detail</MudButton>
-        </MudCardActions>
-        </MudCard>
-        </div>
-        }
-        }
-        </div>
-        </div>*@
-}
+ }
 
 @code {
     public bool IsProcessing { get; set; } = false;

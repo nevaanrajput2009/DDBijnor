@@ -41,6 +41,8 @@ else
                     <MudTh>Order Id</MudTh>
                     <MudTh>Order Date</MudTh>
                     <MudTh>Status</MudTh>
+                    <MudTh>Item Total</MudTh>
+                    <MudTh>Shipping Charge</MudTh>
                     <MudTh>Order Total</MudTh>
                     @if (IsAdmin)
                     {
@@ -58,6 +60,8 @@ else
                 </MudTd>
                 <MudTd DataLabel="Order Date">@context.OrderHeader.OrderDate.ToString("dd/MMM/yyyy hh:mm tt")</MudTd>
                 <MudTd DataLabel="Status">@context.OrderHeader.Status</MudTd>
+                <MudTd DataLabel="Item Total">₹ @context.OrderHeader.ItemTotal</MudTd>
+                <MudTd DataLabel="Shipping Charge">₹ @context.OrderHeader.ShippingCharge</MudTd>
                 <MudTd DataLabel="Order Total">₹ @context.OrderHeader.OrderTotal</MudTd>
                 @if (IsAdmin)
                     {
@@ -130,7 +134,7 @@ else
         {
             isDeliverd = true;
         }
-        OrderChangeConfirmation = $"Yor are about to {status} this order. <br/> Are you sure.";
+        OrderChangeConfirmation = $"Yor are about to {status} this order. Are you sure.";
         CurrentOrder = order;
         bool? result = await mbox.Show();
         if (result != null)

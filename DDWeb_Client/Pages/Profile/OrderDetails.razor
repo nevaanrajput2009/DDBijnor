@@ -22,15 +22,15 @@ else
                     <MudText Typo="Typo.h6">
                         Customer Name : <code style=""> @CustomerOrder.OrderHeader.Name</code>
                     </MudText>
-                     <MudDivider />
+                    <MudDivider />
                     <MudText Typo="Typo.h6">
                         Mobile Number : <code style=""> @CustomerOrder.OrderHeader.PhoneNumber</code>
                     </MudText>
-                     <MudDivider />
+                    <MudDivider />
                     <MudText Typo="Typo.h6">
                         Order Date : <code style=""> @CustomerOrder.OrderHeader.OrderDate.ToString("dd/MMM/yyyy hh:mm tt")</code>
                     </MudText>
-                     <MudDivider />
+                    <MudDivider />
                     <MudText Typo="Typo.h6">
                         Address : <code style="">
                             @CustomerOrder.OrderHeader.StreetAddress ,
@@ -63,10 +63,18 @@ else
                         <MudDivider />
                     </MudCardContent>
                 }
+
                 <MudCardActions>
-                    <MudAlert>
+                   <MudAlert>
+                        <MudText Typo="Typo.h5" style="width:200px" Class="ml-auto">
+                           Item Total <span style="float:right" >(₹) @CustomerOrder.OrderHeader.ItemTotal</span> 
+                        </MudText>
+                         <MudText Typo="Typo.h5" Class="ml-auto">
+                           Shipping <span style="float:right">(₹) @CustomerOrder.OrderHeader.ShippingCharge</span>
+                        </MudText>
+                        <MudDivider />
                         <MudText Typo="Typo.h5" Class="ml-auto">
-                            Total (₹) ₹ @CustomerOrder.OrderHeader.OrderTotal
+                            Total<span style="float:right" >(₹) @CustomerOrder.OrderHeader.OrderTotal</span>
                         </MudText>
                     </MudAlert>
                 </MudCardActions>

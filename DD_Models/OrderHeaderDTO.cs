@@ -15,6 +15,10 @@ namespace DD_Models
         public string UserId { get; set; }
 
         [Required]
+        [Display(Name = "Item Total")]
+        public double ItemTotal { get; set; }
+
+        [Required]
         [Display(Name = "Order Total")]
         public double OrderTotal { get; set; }
 
@@ -23,6 +27,9 @@ namespace DD_Models
         [Required]
         [Display(Name = "Shipping Date")]
         public DateTime ShippingDate { get; set; }
+
+        public double ShippingCharge { get; set; }
+
         [Required]
         public string Status { get; set; }
 

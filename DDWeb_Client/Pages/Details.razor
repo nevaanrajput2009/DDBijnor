@@ -24,7 +24,7 @@ else
                             <MudText Typo="Typo.caption">@Product.Category.Name</MudText>
                         </CardHeaderContent>
                     </MudCardHeader>
-                    <MudImage Src="@Product.ImageUrl" Height="300"
+                    <MudImage Src="@Product.ImageUrl" Height="250"
                           Elevation="25" Class="rounded-lg ma-2 emptyCardImage" />
                     <MudCardContent>
                         <MudText Typo="Typo.caption">@Product.Description</MudText>
@@ -34,13 +34,13 @@ else
                         {
                             if (productPrice.Id == DetailsVM.SelectedProductPriceId)
                             {
-                                <MudButton Variant="Variant.Outlined" Class="mr-4" Color="Color.Secondary">
+                                <MudButton Variant="Variant.Outlined" Class="mr-4" Color="Color.Primary">
                                     @productPrice.Size
                                 </MudButton>
                             }
                             else
                             {
-                                <MudButton Variant="Variant.Outlined" Class="mr-4" Color="Color.Primary"
+                                <MudButton Variant="Variant.Outlined" Class="mr-4"
                                @onclick="(args)=>SelectedProductPrice(args,productPrice.Id)">
                                     @productPrice.Size
                                 </MudButton>
@@ -102,6 +102,12 @@ else
         Product = await _productService.Get(ProductId);
         IsProcessing = false;
         DateTime? date = DetailsVM.EventDate;
+        if (Product.ProductPrices != null)
+        {
+            DetailsVM.ProductPrice = Product.ProductPrices.MinBy(x => x.Price);
+            DetailsVM.SelectedProductPriceId = DetailsVM.ProductPrice.Id;
+            SelectedPrice = DetailsVM.ProductPrice.Price;
+        }
     }
 
     private async Task SelectedProductPrice(MouseEventArgs e, int productPriceId)

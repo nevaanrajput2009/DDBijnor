@@ -78,8 +78,15 @@ else
                 }
                 <MudCardActions>
                     <MudAlert>
+                        <MudText Typo="Typo.h5" style="width:200px" Class="ml-auto">
+                           Item Total <span style="float:right" >(₹) @Order.OrderHeader.ItemTotal</span> 
+                        </MudText>
+                         <MudText Typo="Typo.h5" Class="ml-auto">
+                           Shipping <span style="float:right">(₹) @Order.OrderHeader.ShippingCharge</span>
+                        </MudText>
+                        <MudDivider />
                         <MudText Typo="Typo.h5" Class="ml-auto">
-                            Total (₹) ₹ @Order.OrderHeader.OrderTotal
+                            Total<span style="float:right" >(₹) @Order.OrderHeader.OrderTotal</span>
                         </MudText>
                     </MudAlert>
                 </MudCardActions>
@@ -123,8 +130,18 @@ else
                     EventDate = item.EventDate
                 };
             Order.OrderDetails.Add(orderDetailDTO);
-            Order.OrderHeader.OrderTotal += (item.Count * productPrice.Price);
+            Order.OrderHeader.ItemTotal += (item.Count * productPrice.Price);
         }
+        Order.OrderHeader.ShippingCharge = 0;
+        if(Order.OrderHeader.ItemTotal < 100)
+        {
+            Order.OrderHeader.ShippingCharge = 50; 
+        }
+        else if(Order.OrderHeader.ItemTotal < 200)
+        {
+            Order.OrderHeader.ShippingCharge = 30; 
+        }
+        Order.OrderHeader.OrderTotal = Order.OrderHeader.ItemTotal + Order.OrderHeader.ShippingCharge;
 
         if (await _localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails) != null)
         {

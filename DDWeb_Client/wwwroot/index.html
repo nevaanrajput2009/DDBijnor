@@ -3,7 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>DD</title>
+    <title>DD Bijnor</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
     <base href="/" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
     <style>
@@ -14,13 +18,15 @@
 
         @media all and (max-width: 767px) {
             .cartImageHeight {
-                height: 100px;
+                height: 70px;
                 width: 100% !important;
             }
-            .emptyCardImage{
+
+            .emptyCardImage {
                 width: 95% !important;
             }
         }
+
         @media (min-width:1025px) {
             .cartImageHeight {
                 height: 100px;
@@ -30,12 +36,11 @@
             .emptyCardImage {
                 width: 35% !important;
             }
-            .margin10Percent{
-                margin-left:10% !important;
+
+            .margin10Percent {
+                margin-left: 10% !important;
             }
         }
-
-
     </style>
 </head>
 
@@ -47,11 +52,6 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script>
-        Blazor.defaultReconnectionHandler._reconnectCallback = function (d) {
-            document.location.reload();
-        }
-    </script>
     <script src="js/StripePayment.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
