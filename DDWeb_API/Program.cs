@@ -11,6 +11,9 @@ using DD_Business.Repository.IRepository;
 using DD_DataAccess;
 using DD_DataAccess.Data;
 using DDWeb_API.Helper;
+using DDWeb_API.Model;
+using CorePush.Google;
+using CorePush.Apple;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,6 +86,14 @@ builder.Services.AddAuthentication(opt =>
         ClockSkew = TimeSpan.Zero
     };
 });
+
+builder.Services.AddTransient<INotificationService, NotificationService>();
+builder.Services.AddHttpClient<FcmSender>();
+builder.Services.AddHttpClient<ApnSender>();
+
+// Configure strongly typed settings objects
+var appSettingsSection = builder.Configuration.GetSection("FcmNotification");
+builder.Services.Configure<FcmNotificationSetting>(appSettingsSection);
 
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
