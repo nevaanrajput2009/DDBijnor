@@ -52,7 +52,12 @@ else
                     <MudCardContent>
                         <MudGrid>
                             <MudItem xs="8" sm="8" md="6" lg="6" xxl="6" xl="6">
-                                <MudText Typo="Typo.h5"><b>@customerOrderDetail.ProductName</b></MudText>
+                                <MudText Typo="Typo.h5">
+                                    <MudLink Style="cursor:pointer"
+                                     @onclick="()=> ProductDetailClick(customerOrderDetail.ProductId)" Class="ml-auto">
+                                    <b>@customerOrderDetail.ProductName</b>
+                                    </MudLink>
+                                </MudText>
                                 <MudText Typo="Typo.h6">Size : @customerOrderDetail.Size</MudText>
                                 <MudText Typo="Typo.h6">Count : @customerOrderDetail.Count</MudText>
                                 <MudElement HtmlTag="h2">
@@ -97,5 +102,8 @@ else
     {
         _navigationManager.NavigateTo("/orders");
     }
-
+    protected void ProductDetailClick(int productId)
+    {
+        _navigationManager.NavigateTo($"/details/{productId}");
+    }
 }

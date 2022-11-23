@@ -1,0 +1,63 @@
+﻿@page "/"
+@inject IProductService _productService
+@inject NavigationManager _navigationManager
+
+@if (IsProcessing)
+{
+    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+}
+else
+{
+    <MudTabs Elevation="4" Centered="true" Color="@Color.Primary">
+        @foreach (var category in Products.Select(u => u.Category.Name).Distinct())
+        {
+            
+            <MudTabPanel Text="@category">
+                 <MudGrid>
+                    @foreach (var product in Products.Where(u => u.Category.Name == category))
+                    {
+                        <MudItem xs="12" sm="12" md="4" lg="3" xxl="3" xl="3">
+                            <MudCard>
+                                <MudImage Src="@product.ImageUrl" Style="width:95%" Height="250"
+                              Elevation="25" Class="rounded-lg ma-2" />
+                                <MudCardContent>
+                                    <MudElement HtmlTag="h2">
+                                        ₹
+                                        @product.ProductPrices.OrderBy(u=>u.Price).FirstOrDefault()?.Price.ToString()
+                                    </MudElement>
+                                    <MudElement HtmlTag="h3">
+                                        @product.Name
+                                    </MudElement>
+                                    <MudText Typo="Typo.body2">@((MarkupString)product.Description)</MudText>
+                                </MudCardContent>
+                                <MudCardActions>
+                                    <MudButton @onclick="()=> ProductDetailClick(product.Id)" Variant="Variant.Filled" Color="Color.Success">View Detail</MudButton>
+                                </MudCardActions>
+                            </MudCard>
+                            </MudItem>
+                            <br />
+                    }
+                   </MudGrid>
+            </MudTabPanel>
+            
+        }
+    </MudTabs>
+ }
+
+@code {
+    public bool IsProcessing { get; set; } = false;
+    public IEnumerable<ProductDTO> Products { get; set; } = new List<ProductDTO>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsProcessing = true;
+        Products = await _productService.GetAll();
+        IsProcessing = false;
+    }
+
+    protected void ProductDetailClick(int productId)
+    {
+        _navigationManager.NavigateTo($"/details/{productId}");
+    }
+}

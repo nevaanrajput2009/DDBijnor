@@ -6,6 +6,8 @@ using Stripe.Checkout;
 using DD_Business.Repository.IRepository;
 using DD_DataAccess;
 using DD_Models;
+using DD_Business.Repository;
+using System.Net.Mail;
 
 namespace DDWeb_API.Controllers
 {
@@ -14,12 +16,12 @@ namespace DDWeb_API.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailRepository _emailRepository;
         private readonly UserManager<ApplicationUser> _userManager;
-        public OrderController(IOrderRepository orderRepository, IEmailSender emailSender, UserManager<ApplicationUser> userManager)
+        public OrderController(IOrderRepository orderRepository, IEmailRepository emailRepository, UserManager<ApplicationUser> userManager)
         {
             _orderRepository = orderRepository;
-            _emailSender = emailSender;
+            _emailRepository = emailRepository;
             _userManager = userManager;
         }
 
@@ -76,9 +78,15 @@ namespace DDWeb_API.Controllers
         {
             paymentDTO.Order.OrderHeader.OrderDate=DateTime.Now;
             var result = await _orderRepository.Create(paymentDTO.Order);
+            Thread email = new Thread(delegate ()
+            {
+                _emailRepository.SendEmail(result);
+            });
+
+            email.IsBackground = true;
+            email.Start();
             return Ok(result);  
         }
-
 
         [HttpPut]
         [ActionName("updatestatus")]

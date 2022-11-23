@@ -100,7 +100,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository,OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IEmailSender,EmailSender>();
+builder.Services.AddScoped<IEmailRepository, EmailRepository>();
+
 builder.Services.AddCors(o => o.AddPolicy("DD", builder =>
 {
     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();

@@ -1,0 +1,71 @@
+﻿@page "/OrderConfirmation"
+
+@inject ILocalStorageService _localStorage
+@inject IOrderService _orderService
+
+    @if (IsProcessing)
+{
+    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="12" sm="12" md="8" lg="8" xxl="8" xl="8">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        @if (Order.OrderHeader.Status == SD.Status_Confirmed)
+                        {
+                            <MudText Typo="Typo.h4">Order Confirmed</MudText>
+                            <MudText Typo="Typo.body2">
+                                Your order has been placed successfully with order id :
+                                <code style="color:blue;"> #@(Order.OrderHeader.Id+1000)</code>
+                            </MudText>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.h4">Order Issue!</MudText>
+                            <MudText Typo="Typo.body2">
+                                Your order had payment issue please cotact us with Order ID:
+                                <code style="color:blue;"> #@(Order.OrderHeader.Id+1000)</code>
+                            </MudText>
+                        }
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudImage Src="/images/confirmation.jpg" Class="emptyCardImage rounded-lg" Height="250" />
+                    <MudImage Src="/images/ThankYou.jpg"  Class="emptyCardImage margin10Percent rounded-lg" Height="250" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudText Typo="Typo.h4"> <code style="color:black;">Contact: 8287664962</code></MudText>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+}
+
+
+@code {
+    private bool IsProcessing { get; set; } = false;
+    private OrderDTO Order { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsProcessing = true;
+        Order = await _localStorage.GetItemAsync<OrderDTO>(SD.Local_OrderDetails);
+        //add logic to check payment and update status
+
+        var updatedOrder = await _orderService.MarkPaymentSuccessful(Order.OrderHeader);
+        if (updatedOrder.Status == SD.Status_Confirmed)
+        {
+            Order.OrderHeader.Status = updatedOrder.Status;
+            await _localStorage.RemoveItemAsync(SD.ShoppingCart);
+            await _localStorage.RemoveItemAsync(SD.Local_OrderDetails);
+
+
+        }
+
+
+        IsProcessing = false;
+    }
+}

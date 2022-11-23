@@ -14,7 +14,7 @@
                 {
                     <MudText Style="color:red;font-weight:bold;">@Errors</MudText>
                 }
-                <MudTextField Label="User Name" @bind-Value="SignInRequest.UserName" For="@(() => SignInRequest.UserName)" />
+                <MudTextField Label="User Name" HelperText="Enter your username" @bind-Value="SignInRequest.UserName" For="@(() => SignInRequest.UserName)" />
                 <MudTextField Label="Password" HelperText="Enter your password" Class="mt-3"
                               @bind-Value="SignInRequest.Password" For="@(() => SignInRequest.Password)" InputType="InputType.Password" />
             </MudCardContent>

@@ -1,0 +1,278 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
+        <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+        <!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
+        <OutputType>Exe</OutputType>
+        <RootNamespace>BlazorMAUIAPP</RootNamespace>
+        <UseMaui>true</UseMaui>
+        <SingleProject>true</SingleProject>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <EnableDefaultCssItems>false</EnableDefaultCssItems>
+
+        <!-- Display name -->
+        <ApplicationTitle>DD Bijnor</ApplicationTitle>
+
+        <!-- App Identifier -->
+        <ApplicationId>com.ddbijnor.ddbijnorapp</ApplicationId>
+        <ApplicationIdGuid>93275E61-3F80-4C96-AE07-E6D1B5325EA1</ApplicationIdGuid>
+
+        <!-- Versions -->
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <ApplicationVersion>2</ApplicationVersion>
+
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+        <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- App Icon -->
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+
+        <!-- Splash Screen -->
+
+        <!-- Images -->
+        <MauiImage Include="Resources\Images\*" />
+        <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+
+        <!-- Custom Fonts -->
+        <MauiFont Include="Resources\Fonts\*" />
+
+        <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AndroidResource Remove="wwwroot\images\Product\**" />
+      <Compile Remove="wwwroot\images\Product\**" />
+      <Content Remove="wwwroot\images\Product\**" />
+      <EmbeddedResource Remove="wwwroot\images\Product\**" />
+      <None Remove="wwwroot\images\Product\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Splash\splash.svg" />
+    </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+		<PackageReference Include="MudBlazor" Version="6.0.17" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DD_Common\DD_Common.csproj" />
+		<ProjectReference Include="..\DD_Models\DD_Models.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="appsettings.json">
+	    <ExcludeFromSingleFile>false</ExcludeFromSingleFile>
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="Pages\Index.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  </Content>
+	  <Content Update="Shared\MainLayout.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  </Content>
+	  <Content Update="Shared\NavMenu.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  </Content>
+	  <Content Update="Shared\SurveyPrompt.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  </Content>
+	  <Content Update="wwwroot\css\app.css">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\css\bootstrap\bootstrap.min.css">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\css\bootstrap\bootstrap.min.css.map">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\css\open-iconic\FONT-LICENSE">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\css\open-iconic\font\css\open-iconic-bootstrap.min.css">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\css\open-iconic\font\fonts\open-iconic.eot">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\css\open-iconic\font\fonts\open-iconic.otf">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\css\open-iconic\font\fonts\open-iconic.svg">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\css\open-iconic\font\fonts\open-iconic.ttf">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\css\open-iconic\font\fonts\open-iconic.woff">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\css\open-iconic\ICON-LICENSE">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\css\open-iconic\README.md">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\favicon.ico">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\favicon\android-chrome-192x192.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\favicon\android-chrome-512x512.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\favicon\apple-touch-icon.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\favicon\favicon-16x16.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\favicon\favicon-32x32.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\favicon\favicon.ico">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\favicon\site.webmanifest">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\icon-192.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\images\ajax-loader.gif">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\images\background.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\images\confirmation.jpg">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\images\emptycart.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\images\loader.gif">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\images\ThankYou.jpg">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\index.html">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\js\common.js">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\js\StripePayment.js">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\sample-data\weather.json">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\Authentication\Login.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Pages\Authentication\Login.razor" />
+	  <_ContentIncludedByDefault Remove="Pages\Authentication\Logout.razor" />
+	  <_ContentIncludedByDefault Remove="Pages\Authentication\RedirectToLogin.razor" />
+	  <_ContentIncludedByDefault Remove="Pages\Authentication\Register.razor" />
+	  <_ContentIncludedByDefault Remove="Pages\CartDetails\Cart.razor" />
+	  <_ContentIncludedByDefault Remove="Pages\CartDetails\OrderConfirmation.razor" />
+	  <_ContentIncludedByDefault Remove="Pages\CartDetails\Summary.razor" />
+	  <_ContentIncludedByDefault Remove="Pages\Details.razor" />
+	  <_ContentIncludedByDefault Remove="Pages\Profile\OrderDetails.razor" />
+	  <_ContentIncludedByDefault Remove="Pages\Profile\Orders.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\Authentication\Logout.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\Authentication\RedirectToLogin.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\Authentication\Register.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\CartDetails\Cart.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\CartDetails\OrderConfirmation.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\CartDetails\Summary.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\Profile\OrderDetails.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\Profile\Orders.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\Details.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiSplashScreen Include="Resources\Splash\splash.svg" />
+	</ItemGroup>
+</Project>
