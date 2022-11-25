@@ -99,66 +99,73 @@ else
     {
         IsProcessing = true;
         List<ShoppingCart> cart = await _localStorage.GetItemAsync<List<ShoppingCart>>(SD.ShoppingCart);
-        Products = await _productService.GetAll();
-        Order = new()
-            {
-                OrderHeader = new()
-                {
-                    OrderTotal = 0,
-                    Status = SD.Status_Pending
-                },
-                OrderDetails = new List<OrderDetailDTO>()
-            };
-
-        foreach (var item in cart)
+        if (cart == null || cart.Count() == 0)
         {
-            ProductDTO product = Products.FirstOrDefault(u => u.Id == item.ProductId);
-            ProductPriceDTO productPrice = product.ProductPrices.FirstOrDefault(u => u.Id == item.ProductPriceId);
-
-            OrderDetailDTO orderDetailDTO = new()
+            _navigationManager.NavigateTo("/");
+        }
+        else
+        {
+            Products = await _productService.GetAll();
+            Order = new()
                 {
-                    ProductId = item.ProductId,
-                    Size = productPrice.Size,
-                    Count = item.Count,
-                    Price = productPrice.Price,
-                    ProductName = product.Name,
-                    Product = product,
-                    EventDate = item.EventDate
+                    OrderHeader = new()
+                    {
+                        OrderTotal = 0,
+                        Status = SD.Status_Pending
+                    },
+                    OrderDetails = new List<OrderDetailDTO>()
                 };
-            Order.OrderDetails.Add(orderDetailDTO);
-            Order.OrderHeader.ItemTotal += (item.Count * productPrice.Price);
-        }
-        Order.OrderHeader.ShippingCharge = 0;
-        if(Order.OrderHeader.ItemTotal < 100)
-        {
-            Order.OrderHeader.ShippingCharge = 50; 
-        }
-        else if(Order.OrderHeader.ItemTotal < 200)
-        {
-            Order.OrderHeader.ShippingCharge = 30; 
-        }
-        Order.OrderHeader.OrderTotal = Order.OrderHeader.ItemTotal + Order.OrderHeader.ShippingCharge;
 
-        if (await _localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails) != null)
-        {
-            var userInfo = await _localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails);
-            Order.OrderHeader.UserId = userInfo.Id;
-            Order.OrderHeader.Name = userInfo.Name;
-            Order.OrderHeader.Email = userInfo.Email;
-            Order.OrderHeader.PhoneNumber = userInfo.PhoneNumber;
-            var userAddress = await _productService.GetDefaultAddress(userInfo.Id);
-            if (userAddress != null)
+            foreach (var item in cart)
             {
-                Order.OrderHeader.Name = string.IsNullOrEmpty(userAddress.Name) ? Order.OrderHeader.Name : userAddress.Name;
-                Order.OrderHeader.PhoneNumber = string.IsNullOrEmpty(userAddress.PhoneNumber) ? Order.OrderHeader.PhoneNumber : userAddress.PhoneNumber;
-                Order.OrderHeader.StreetAddress = userAddress.StreetAddress;
-                Order.OrderHeader.City = userAddress.City;
-                Order.OrderHeader.State = userAddress.State;
-                Order.OrderHeader.PostalCode = userAddress.PostalCode;
-            }
-        }
+                ProductDTO product = Products.FirstOrDefault(u => u.Id == item.ProductId);
+                ProductPriceDTO productPrice = product.ProductPrices.FirstOrDefault(u => u.Id == item.ProductPriceId);
 
-        IsProcessing = false;
+                OrderDetailDTO orderDetailDTO = new()
+                    {
+                        ProductId = item.ProductId,
+                        Size = productPrice.Size,
+                        Count = item.Count,
+                        Price = productPrice.Price,
+                        ProductName = product.Name,
+                        Product = product,
+                        EventDate = item.EventDate
+                    };
+                Order.OrderDetails.Add(orderDetailDTO);
+                Order.OrderHeader.ItemTotal += (item.Count * productPrice.Price);
+            }
+            Order.OrderHeader.ShippingCharge = 0;
+            if (Order.OrderHeader.ItemTotal < 100)
+            {
+                Order.OrderHeader.ShippingCharge = 50;
+            }
+            else if (Order.OrderHeader.ItemTotal < 200)
+            {
+                Order.OrderHeader.ShippingCharge = 30;
+            }
+            Order.OrderHeader.OrderTotal = Order.OrderHeader.ItemTotal + Order.OrderHeader.ShippingCharge;
+
+            if (await _localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails) != null)
+            {
+                var userInfo = await _localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails);
+                Order.OrderHeader.UserId = userInfo.Id;
+                Order.OrderHeader.Name = userInfo.Name;
+                Order.OrderHeader.Email = userInfo.Email;
+                Order.OrderHeader.PhoneNumber = userInfo.PhoneNumber;
+                var userAddress = await _productService.GetDefaultAddress(userInfo.Id);
+                if (userAddress != null)
+                {
+                    Order.OrderHeader.Name = string.IsNullOrEmpty(userAddress.Name) ? Order.OrderHeader.Name : userAddress.Name;
+                    Order.OrderHeader.PhoneNumber = string.IsNullOrEmpty(userAddress.PhoneNumber) ? Order.OrderHeader.PhoneNumber : userAddress.PhoneNumber;
+                    Order.OrderHeader.StreetAddress = userAddress.StreetAddress;
+                    Order.OrderHeader.City = userAddress.City;
+                    Order.OrderHeader.State = userAddress.State;
+                    Order.OrderHeader.PostalCode = userAddress.PostalCode;
+                }
+            }
+
+            IsProcessing = false;
+        }
     }
 
 

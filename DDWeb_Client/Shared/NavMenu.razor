@@ -6,26 +6,28 @@
     <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
     <MudSpacer />
     <div>
-    <MudNavLink Href="/cart" Style="height: 61px;margin-top: -12%;">
-    <MudBadge Content="@GetCartCount()" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
-        <MudIcon Icon="@Icons.Material.Filled.ShoppingBasket" Color="Color.Default" />
-    </MudBadge>
-    </MudNavLink>
-     </div>
+        <MudNavLink Href="/cart" Style="height: 61px;margin-top: -12%;">
+            <MudBadge Content="@GetCartCount()" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
+                <MudIcon Icon="@Icons.Material.Filled.ShoppingBasket" Color="Color.Default" />
+            </MudBadge>
+        </MudNavLink>
+    </div>
     <AuthorizeView>
         <Authorized>
             <MudText Typo="Typo.h6"> @context.User.Identity.Name</MudText>
         </Authorized>
     </AuthorizeView>
-   
+
 </MudAppBar>
 <MudDrawer @bind-Open="@open" Elevation="1">
     <MudDrawerHeader>
-         <MudText Typo="Typo.h6">Daily Delight</MudText>
+        <MudText Typo="Typo.h6">Daily Delight</MudText>
     </MudDrawerHeader>
     <MudNavMenu>
         <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Filled.Home">Home</MudNavLink>
         <MudNavLink Href="/orders" Match="NavLinkMatch.All" Icon="@Icons.Filled.ShoppingCart">Orders</MudNavLink>
+        <MudNavLink Href="/contact" Match="NavLinkMatch.All" Icon="@Icons.Filled.ContactPage">Contact Us</MudNavLink>
+
         <br />
         <AuthorizeView>
             <Authorized>
@@ -37,6 +39,7 @@
             </NotAuthorized>
         </AuthorizeView>
     </MudNavMenu>
+    <MudNavLink Href="/policy" Match="NavLinkMatch.All" Icon="@Icons.Filled.Policy">Policy</MudNavLink>
 </MudDrawer>
 @code {
     bool open = false;

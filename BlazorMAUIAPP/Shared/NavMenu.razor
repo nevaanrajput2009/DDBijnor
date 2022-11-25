@@ -24,10 +24,10 @@
         <MudText Typo="Typo.h6">Daily Delight</MudText>
     </MudDrawerHeader>
     <MudNavMenu>
-      @*  <MudNavLink Href="/contact" Match="NavLinkMatch.All" Icon="@Icons.Filled.Home">Contact</MudNavLink>
-*@
         <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Filled.Home">Home</MudNavLink>
         <MudNavLink Href="/orders" Match="NavLinkMatch.All" Icon="@Icons.Filled.ShoppingCart">Orders</MudNavLink>
+        <MudNavLink Href="/contact" Match="NavLinkMatch.All" Icon="@Icons.Filled.ContactPage">Contact Us</MudNavLink>
+
         <br />
         <AuthorizeView>
             <Authorized>
@@ -59,7 +59,7 @@
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-       count = await GetCartCount();
+        count = await GetCartCount();
         StateHasChanged();
     }
     private async Task<int> GetCartCount()
