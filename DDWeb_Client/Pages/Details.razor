@@ -16,7 +16,7 @@ else
     <EditForm OnValidSubmit="AddToCart" Model="DetailsVM" method="post">
         <DataAnnotationsValidator />
         <MudGrid>
-            <MudItem xs="12" sm="12" md="10" lg="10" xxl="10" xl="10">
+            <MudItem xs="12" sm="12" md="6" lg="6" xxl="4" xl="4">
                 <MudCard>
                     <MudCardHeader>
                         <CardHeaderContent>
@@ -25,7 +25,7 @@ else
                         </CardHeaderContent>
                     </MudCardHeader>
                     <MudImage Src="@Product.ImageUrl" Height="250"
-                          Elevation="25" Class="rounded-lg ma-2 emptyCardImage" />
+                          Elevation="25" Class="rounded-lg ma-2 center" />
                     <MudCardContent>
                         <MudText Typo="Typo.caption">@Product.Description</MudText>
                         <br />

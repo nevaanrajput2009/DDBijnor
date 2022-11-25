@@ -29,12 +29,10 @@ else
                         <MudTextField Label="Name" @bind-Value="Order.OrderHeader.Name" For="@(() => Order.OrderHeader.Name)" />
                         <MudTextField Label="Phone Number" HelperText="Do not need 0 or +91"
                                   @bind-Value="Order.OrderHeader.PhoneNumber" For="@(() => Order.OrderHeader.PhoneNumber)" />
-                        <MudTextField Label="Street Address" Class="mt-3"
-                                  @bind-Value="Order.OrderHeader.StreetAddress" For="@(() => Order.OrderHeader.StreetAddress)" />
-                        <MudTextField Label="City" Class="mt-3"
+                        <MudTextField Label="Village Name" Class="mt-3"
                                   @bind-Value="Order.OrderHeader.City" For="@(() => Order.OrderHeader.City)" />
-                        <MudTextField Label="Postal Code" Class="mt-3"
-                                  @bind-Value="Order.OrderHeader.PostalCode" For="@(() => Order.OrderHeader.PostalCode)" />
+                        <MudTextField Label="Landmark" Class="mt-3"
+                                  @bind-Value="Order.OrderHeader.StreetAddress" For="@(() => Order.OrderHeader.StreetAddress)" />
                     </MudCardContent>
                     <MudCardActions>
                         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Checkout Now</MudButton>
