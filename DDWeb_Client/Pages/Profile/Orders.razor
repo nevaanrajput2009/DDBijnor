@@ -68,8 +68,9 @@ else
                     <MudTd DataLabel="Customer Name">@context.OrderHeader.Name</MudTd>
                     <MudTd DataLabel="Mobile Number">@context.OrderHeader.PhoneNumber</MudTd>
                     <MudTd DataLabel="Action">
-                        <MudButton @onclick="@(async () => await OnOrderStatusChanged(@context, "Deliverd"))" Variant="Variant.Filled" Color="Color.Primary">Deliverd</MudButton>
-                        <MudButton @onclick="@(async () => await OnOrderStatusChanged(@context, "Cancelled"))" Variant="Variant.Filled" Color="Color.Secondary">Cancelled</MudButton>
+                     <MudButton @onclick="@(async () => await NotifyOrder(@context))" Variant="Variant.Filled" Color="Color.Success">Notify</MudButton>
+                    <MudButton @onclick="@(async () => await OnOrderStatusChanged(@context, "Deliverd"))" Variant="Variant.Filled" Color="Color.Primary">Deliverd</MudButton>
+                    <MudButton @onclick="@(async () => await OnOrderStatusChanged(@context, "Cancelled"))" Variant="Variant.Filled" Color="Color.Secondary">Cancelled</MudButton>
                     </MudTd>
                     }
             </RowTemplate>
@@ -147,6 +148,15 @@ else
             }
         }
         StateHasChanged();
+    }
+
+    protected async Task NotifyOrder(OrderDTO order)
+    {
+        bool isOrderUpdated = await _orderService.NotifyOrderChecked(order.OrderHeader.Id);
+        if (isOrderUpdated)
+        {
+            Snackbar.Add($"Order notified successfully", Severity.Success);
+        }
     }
 
     private void GoToOrderDetail(int orderHeaderId)

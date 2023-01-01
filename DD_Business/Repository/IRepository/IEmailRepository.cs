@@ -10,5 +10,6 @@ namespace DD_Business.Repository.IRepository
     public interface IEmailRepository
     {
         void SendEmail(OrderDTO orderDetails);
+        void SendOrderCheckedEmail(OrderDTO orderDetails);
     }
 }

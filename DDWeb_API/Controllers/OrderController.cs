@@ -121,5 +121,27 @@ namespace DDWeb_API.Controllers
 
             //return BadRequest();
         }
+
+
+        [HttpPut]
+        [ActionName("notifyOrderChecked")]
+        public async Task<IActionResult> NotifyOrderChecked([FromBody] OrderStatusDTO orderHeader)
+        {
+            var orderHeaderResult = await _orderRepository.Get(orderHeader.OrderId);
+            if (orderHeaderResult != null)
+            {
+                _emailRepository.SendOrderCheckedEmail(orderHeaderResult);
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(new ErrorModelDTO()
+                {
+                    ErrorMessage = "Invalid Id",
+                    StatusCode = StatusCodes.Status404NotFound
+                });
+            }
+        }
+
     }
 }

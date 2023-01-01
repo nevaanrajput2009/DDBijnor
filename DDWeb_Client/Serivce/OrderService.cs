@@ -94,7 +94,22 @@ namespace DDWeb_Client.Serivce
             var errorModel = JsonConvert.DeserializeObject<ErrorModelDTO>(responseResult);
             throw new Exception(errorModel?.ErrorMessage);
         }
-       
+
+        public async Task<bool> NotifyOrderChecked(int orderId)
+        {
+            var content = JsonConvert.SerializeObject(new OrderStatusDTO { OrderId = orderId, Status = "Confirmed" });
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"{IISHelper.AppentUrl}/api/order/notifyOrderChecked", bodyContent);
+            string responseResult = response.Content.ReadAsStringAsync().Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var isOrderStatusUpdated = true;
+                return isOrderStatusUpdated;
+            }
+            var errorModel = JsonConvert.DeserializeObject<ErrorModelDTO>(responseResult);
+            throw new Exception(errorModel?.ErrorMessage);
+        }        
+
         public async Task<OrderHeaderDTO> MarkPaymentSuccessful(OrderHeaderDTO orderHeader)
         {
             var content = JsonConvert.SerializeObject(orderHeader);
