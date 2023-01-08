@@ -17,6 +17,11 @@ namespace DD_DataAccess
         // add nagivation property : #TODO
 
         [Required]
+        public double ItemTotal { get; set; }
+
+        public double ShippingCharge { get; set; }
+
+        [Required]
         public double OrderTotal { get; set; }
 
         [Required]

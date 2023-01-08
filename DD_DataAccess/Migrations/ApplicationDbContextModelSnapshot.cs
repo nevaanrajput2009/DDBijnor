@@ -97,6 +97,9 @@ namespace DD_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("ItemTotal")
+                        .HasColumnType("float");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -120,6 +123,9 @@ namespace DD_DataAccess.Migrations
 
                     b.Property<string>("SessionId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("ShippingCharge")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("ShippingDate")
                         .HasColumnType("datetime2");

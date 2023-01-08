@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>DD Bijnor</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="_content/DD_SharedUI/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="_content/DD_SharedUI/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="_content/DD_SharedUI/favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <base href="/" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <style>
+        .mud-grid-spacing-xs-3 {
+            width: calc(100%) !important;
+            margin: 0px !important;
+        }
+        .center {
+            display: block;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        @media all and (max-width: 767px) {
+            .cartImageHeight {
+                height: 70px;
+                width: 100% !important;
+            }
+
+            .emptyCardImage {
+                width: 95% !important;
+            }
+        }
+
+        @media (min-width:1025px) {
+            .cartImageHeight {
+                height: 100px;
+            }
+
+            .emptyCardImage {
+                width: 35% !important;
+            }
+
+            .margin10Percent {
+                margin-left: 10% !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">Loading...</div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_content/DD_SharedUI/js/StripePayment.js"></script>
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    <script src="_framework/blazor.webview.js" autostart="false"></script>
+
+</body>
+
+</html>

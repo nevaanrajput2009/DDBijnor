@@ -1,0 +1,23 @@
+﻿@using MudBlazor
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Main).Assembly" AdditionalAssemblies="new[] { typeof(DD_SharedUI.Shared.MainLayout).Assembly }">
+    <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(DD_SharedUI.Shared.MainLayout)">
+            <Authorizing>
+                <p>Please wait, we are authorizring the user!</p>
+            </Authorizing>
+            <NotAuthorized>
+                    <DD_SharedUI.Pages.Authentication.RedirectToLogin></DD_SharedUI.Pages.Authentication.RedirectToLogin>
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(DD_SharedUI.Shared.MainLayout)">
+            <p role="alert">Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+</CascadingAuthenticationState>
