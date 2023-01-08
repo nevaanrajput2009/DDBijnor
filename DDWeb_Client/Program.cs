@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using DDWeb_Client;
-using DDWeb_Client.Serivce;
-using DDWeb_Client.Serivce.IService;
 using MudBlazor.Services;
 using MudBlazor;
+using DD_SharedUI.Serivce.IService;
+using DD_SharedUI.Serivce;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

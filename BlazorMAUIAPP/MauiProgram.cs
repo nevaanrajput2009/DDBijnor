@@ -1,12 +1,10 @@
 ﻿using Blazored.LocalStorage;
+using DD_SharedUI.Serivce;
+using DD_SharedUI.Serivce.IService;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
-using MudBlazor.Services;
-using DDWeb_Client.Serivce.IService;
-using DDWeb_Client.Serivce;
 using MudBlazor;
-using Microsoft.Extensions.Configuration.Json;
-using System.Reflection;
+using MudBlazor.Services;
 
 namespace BlazorMAUIAPP;
 
@@ -21,8 +19,14 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 			});
+        var configuration = builder.Configuration;
+        var baseServerUrlConfig = new Dictionary<string, string>
+        {
+            { "BaseServerUrl", "https://ddbijnor.com" }
+        };
+        configuration.AddInMemoryCollection(baseServerUrlConfig);
 
-		builder.Services.AddMauiBlazorWebView();
+        builder.Services.AddMauiBlazorWebView();
 		#if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
@@ -30,7 +34,7 @@ public static class MauiProgram
         builder.Services.AddMudServices();
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = 
             new Uri("https://ddapi.ddbijnor.com") });
-        // builder.Configuration.AddJsonFile("BlazorMAUIAPP/appsettings.json");
+
         builder.Services.AddMudServices(config =>
         {
             config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.TopRight;
@@ -51,6 +55,7 @@ public static class MauiProgram
         builder.Services.AddAuthorizationCore();
         builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
         builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
 
         return builder.Build();
 	}
